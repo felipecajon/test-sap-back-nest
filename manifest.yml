@@ -1,6 +1,8 @@
 applications:
+  # Application Back Nest
   - name: test-sap-back-nest
-    path: ./
+    instances: 1
+    path: ./app-countries
     buildpacks:
       - nodejs_buildpack
     memory: 1024M
@@ -8,4 +10,27 @@ applications:
     random-route: true
     services:
       - Destinations
-      - my-xsuaa
+      - xsuaa-test-sap-back-nest
+    routes:
+    - route: test-sap-back-nest.cfapps.us10-001.hana.ondemand.com
+  
+  # Application Router
+  - name: app-router
+    routes:
+      - route: app-router-test-sap-back-nest.cfapps.us10-001.hana.ondemand.com
+    path: ./app-router
+    buildpacks:
+      - nodejs_buildpack
+    memory: 128M
+    env:
+      destinations: >
+        [
+          {
+            "name":"countries-destination",
+            "url":"https://test-sap-back-nest.cfapps.us10-001.hana.ondemand.com",
+            "forwardAuthToken": true
+          }
+        ]
+    services:
+        - Destinations
+        - xsuaa-test-sap-back-nest

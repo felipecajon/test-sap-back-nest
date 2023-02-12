@@ -29,7 +29,7 @@ describe('AppController', () => {
       jest
         .spyOn(appController, 'getCountries')
         .mockResolvedValue(countriesMock);
-      expect(appController.getCountries('en')).resolves.toEqual(countriesMock);
+      expect(appController.getCountries('req', 'res')).resolves.toEqual(countriesMock);
     });
   });
 });

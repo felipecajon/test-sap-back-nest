@@ -1,0 +1,36 @@
+{
+    "xsappname": "test-sap-back-nest",
+    "tenant-mode": "dedicated",
+    "scopes": [
+		{
+			"name": "$XSAPPNAME.read",
+			"description": "With this scope, USER can read countries."
+		}
+	],
+
+	"role-templates": [
+		{
+			"name": "Viewer",
+			"description": "Role to get the list of countries",
+			"scope-references": [
+				"$XSAPPNAME.read"
+			]
+		}
+	],
+	"role-collections": [
+		{
+			"name": "CountriesListViewer",
+			"description": "Countries List Viewer",
+			"role-template-references": [
+				"$XSAPPNAME.Viewer"
+			]
+		}
+	],
+	"oauth2-configuration": {
+        "token-validity": 86400,
+        "refresh-token-validity": 2592000,
+        "redirect-uris":[
+            "https://*.cfapps.us10-001.hana.ondemand.com/**"
+        ]  
+    }
+}

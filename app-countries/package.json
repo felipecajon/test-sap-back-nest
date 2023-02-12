@@ -33,7 +33,8 @@
     "@sap-cloud-sdk/core": "^1.54.2",
     "@sap/hdbext": "^7.6.6",
     "@sap/xsenv": "^3.4.0",
-    "@sap/xssec": "^3.2.13"
+    "@sap/xssec": "^3.2.13",
+    "passport": "^0.6.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",
