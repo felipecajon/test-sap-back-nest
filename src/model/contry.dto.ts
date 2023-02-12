@@ -1,24 +1,9 @@
-import { IsString } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
-
-export class Contry {
-  @IsString()
-  @ApiProperty({ description: 'Contry Name' })
-  name: string;
-
-  @IsString()
-  @ApiProperty({ description: 'Capital' })
-  capital: string;
-
-  @IsString()
-  @ApiProperty({ description: 'Region' })
-  region: string;
-
-  @IsString()
-  @ApiProperty({ description: 'Subregion' })
-  subregion: string;
-
-  @IsString()
-  @ApiProperty({ description: 'Flag' })
-  flag: string;
+export class CountryDTO {
+  constructor(
+    public name: string,
+    public capital: string,
+    public region: string,
+    public subregion: string,
+    public flag: string,
+  ) {}
 }
