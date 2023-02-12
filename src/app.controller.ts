@@ -10,7 +10,9 @@ export class AppController {
   async getCountries(@Req() req: any): Promise<CountryDTO[]> {
     const { lang } = req.query;
     try {
-      const response = await this.appService.getCountries(lang);
+      const response: any = await this.appService.getCountries(lang);
+      console.log('RESPONSE');
+      console.log(response);
       const contries: CountryDTO[] = response.data.map(
         (item: any) =>
           new CountryDTO(
