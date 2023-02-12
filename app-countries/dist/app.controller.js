@@ -22,19 +22,6 @@ let AppController = class AppController {
     }
     async getCountries(req, res) {
         const { lang } = req.query;
-        const isAuthorized = req.authInfo.checkLocalScope('read');
-        console.log('isAuthorized: ' + isAuthorized);
-        if (req.authInfo.checkLocalScope('read')) {
-            const response = await this.appService.getCountries(lang);
-            console.log('RESPONSE');
-            console.log(response);
-            const countries = response.data.map((item) => new contry_dto_1.CountryDTO(item.name, item.capital, item.region, item.subregion, item.flags.png));
-            return countries;
-        }
-        else {
-            console.log('Missing the expected scope');
-            return res.status(403).end('Forbidden');
-        }
         try {
             const response = await this.appService.getCountries(lang);
             console.log('RESPONSE');
@@ -43,7 +30,22 @@ let AppController = class AppController {
             return countries;
         }
         catch (error) {
-            return error;
+            return [];
+        }
+    }
+    async getCountries2(req, res) {
+        const { lang } = req.query;
+        const isAuthorized = req.authInfo.checkLocalScope('read');
+        console.log('isAuthorized: ' + isAuthorized);
+        if (isAuthorized) {
+            const response = await this.appService.getCountries(lang);
+            console.log('RESPONSE');
+            console.log(response);
+            const countries = response.data.map((item) => new contry_dto_1.CountryDTO(item.name, item.capital, item.region, item.subregion, item.flags.png));
+            return countries;
+        }
+        else {
+            throw new common_1.HttpException('Forbidden', common_1.HttpStatus.FORBIDDEN);
         }
     }
 };
@@ -55,6 +57,14 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], AppController.prototype, "getCountries", null);
+__decorate([
+    (0, common_1.Get)('countries-authenticated'),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], AppController.prototype, "getCountries2", null);
 AppController = __decorate([
     (0, common_1.Controller)('api'),
     __metadata("design:paramtypes", [app_service_1.AppService])

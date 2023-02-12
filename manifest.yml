@@ -5,7 +5,7 @@ applications:
     path: ./app-countries
     buildpacks:
       - nodejs_buildpack
-    memory: 1024M
+    memory: 512M
     command: npm run build && npm run start:prod
     random-route: true
     services:

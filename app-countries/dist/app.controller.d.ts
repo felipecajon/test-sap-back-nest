@@ -4,4 +4,5 @@ export declare class AppController {
     private readonly appService;
     constructor(appService: AppService);
     getCountries(req: any, res: any): Promise<CountryDTO[]>;
+    getCountries2(req: any, res: any): Promise<CountryDTO[]>;
 }
