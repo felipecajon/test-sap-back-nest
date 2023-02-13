@@ -17,32 +17,28 @@ export class AppService {
 
   async getCountries(lang: string) {
     return new Promise((resolve, reject) => {
+
       destination
         .then((destinationObject) => {
           const url = destinationObject.url + lang;
-          console.log('URL: ' + url);
 
           this.httpService(url)
             .then((data) => {
-              console.log('DEU BOA!');
               resolve(data);
             })
             .catch((error) => {
-              console.log('DEU RUIM 1!');
               reject(error.response.data);
             });
         })
         .catch((err) => {
-          console.log('DEU RUIM 2!');
           reject(err);
         });
     });
   }
 
-  async httpService(url: string, header = 'ssds'): Promise<any> {
+  async httpService(url: string): Promise<any> {
     try {
-      const request = await axios.get(url);
-      return request;
+      return await axios.get(url);
     } catch (error) {
       throw error;
     }
