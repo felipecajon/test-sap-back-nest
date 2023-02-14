@@ -4,9 +4,12 @@ import { getServices } from '@sap/xsenv';
 import * as passport from 'passport';
 import { JWTStrategy } from '@sap/xssec';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+const isProd = process.env.PORT;
 
-const xsuaa = getServices({ xsuaa: { tag: 'xsuaa' } }).xsuaa;
-passport.use(new JWTStrategy(xsuaa));
+if (isProd) {
+  const xsuaa = getServices({ xsuaa: { tag: 'xsuaa' } }).xsuaa;
+  passport.use(new JWTStrategy(xsuaa));
+}
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
