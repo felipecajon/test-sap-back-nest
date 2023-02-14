@@ -23,16 +23,13 @@ export class CountriesService {
 
           this.httpService(url)
             .then((data) => {
-              console.log('0');
               resolve(data);
             })
             .catch((error) => {
-              console.log('1');
               reject(error.response.data);
             });
         })
         .catch((err) => {
-          console.log('2');
           reject(err);
         });
     });
