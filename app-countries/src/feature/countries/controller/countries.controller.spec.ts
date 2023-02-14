@@ -1,9 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CountryDTO } from '../model/contry.dto';
 import { CountriesService } from '../services/countries.service';
+import { LogService } from '../services/log.service';
 import { ContriesController } from './countries.controller';
 
-class mockAppService {
+class mockContriesService {
   getCountries() {
     const mockContries = [
       {
@@ -23,6 +24,12 @@ class mockAppService {
   }
 }
 
+class mockLogService {
+  log(lang, email) {
+    return { lang, email };
+  }
+}
+
 describe('ContriesController', () => {
   let contriesController: ContriesController;
 
@@ -32,7 +39,11 @@ describe('ContriesController', () => {
       providers: [
         {
           provide: CountriesService,
-          useClass: mockAppService,
+          useClass: mockContriesService,
+        },
+        {
+          provide: LogService,
+          useClass: mockLogService,
         },
       ],
     }).compile();
@@ -52,9 +63,15 @@ describe('ContriesController', () => {
         },
       ];
 
-      const contries = await contriesController.getCountries({
+      const req = {
         query: { laneg: 'pt' },
-      });
+        authInfo: {
+          checkLocalScope: () => true,
+          getEmail: () => 'test@email.com',
+        },
+      };
+
+      const contries = await contriesController.getCountries(req);
       expect(contries).toEqual(countriesMock);
     });
   });
