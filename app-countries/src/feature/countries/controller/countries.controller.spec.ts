@@ -64,7 +64,7 @@ describe('ContriesController', () => {
       ];
 
       const req = {
-        query: { laneg: 'pt' },
+        query: { lang: 'pt' },
         authInfo: {
           checkLocalScope: () => true,
           getEmail: () => 'test@email.com',
