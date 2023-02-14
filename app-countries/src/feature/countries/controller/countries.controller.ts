@@ -1,15 +1,22 @@
-import { Controller, Get, Req } from '@nestjs/common';
+import * as common from '@nestjs/common';
 import { CountryDTO } from '../model/contry.dto';
 import { CountriesService } from '../services/countries.service';
+import { LogService } from '../services/log.service';
 
-@Controller('api')
+@common.Controller('api')
 export class ContriesController {
-  constructor(private readonly countriesService: CountriesService) {}
+  constructor(
+    private readonly countriesService: CountriesService,
+    private readonly logService: LogService,
+  ) {}
 
-  @Get('countries')
-  async getCountries(@Req() req: any): Promise<CountryDTO[]> {
+  @common.Get('countries')
+  async getCountries(@common.Req() req: any): Promise<CountryDTO[]> {
     const { lang } = req.query;
-    try {
+    const isAuthorized = req.authInfo.checkLocalScope('read');
+
+    if (isAuthorized) {
+      this.logService.log(lang, req.authInfo.getEmail());
       const response: any = await this.countriesService.getCountries(lang);
       const countries: CountryDTO[] = response.data.map(
         (item: any) =>
@@ -21,10 +28,9 @@ export class ContriesController {
             item.flags.png,
           ),
       );
-
       return countries;
-    } catch (error) {
-      return [];
+    } else {
+      throw new common.HttpException('Forbidden', common.HttpStatus.FORBIDDEN);
     }
   }
 }
