@@ -1,6 +1,6 @@
 import { useOrFetchDestination } from '@sap-cloud-sdk/core';
 
-const destionationObject = useOrFetchDestination({
+export const destination = useOrFetchDestination({
   destinationName: 'countries',
 })
   .then((destination) => {
@@ -9,5 +9,3 @@ const destionationObject = useOrFetchDestination({
   .catch((err) => {
     return err;
   });
-
-export const destination = destionationObject;

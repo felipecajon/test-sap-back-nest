@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { CountryDTO } from './model/contry.dto';
+import { CountryDTO } from '../model/contry.dto';
+import { CountriesService } from '../services/countries.service';
+import { ContriesController } from './countries.controller';
 
 class mockAppService {
   getCountries() {
@@ -13,29 +13,31 @@ class mockAppService {
         subregion: 'Polynesia',
         flags: {
           png: 'https://flagcdn.com/w320/as.png',
-        }
+        },
       },
     ];
 
     return new Promise((resolve) => {
-      resolve({data: mockContries})
-    })
+      resolve({ data: mockContries });
+    });
   }
 }
 
-describe('AppController', () => {
-  let appController: AppController;
+describe('ContriesController', () => {
+  let contriesController: ContriesController;
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
-      controllers: [AppController],
-      providers: [{
-        provide: AppService,
-        useClass: mockAppService
-      }],
+      controllers: [ContriesController],
+      providers: [
+        {
+          provide: CountriesService,
+          useClass: mockAppService,
+        },
+      ],
     }).compile();
 
-    appController = app.get<AppController>(AppController);
+    contriesController = app.get<ContriesController>(ContriesController);
   });
 
   describe('root', () => {
@@ -46,12 +48,13 @@ describe('AppController', () => {
           capital: 'Pago Pago',
           region: 'Oceania',
           subregion: 'Polynesia',
-          flag: 'https://flagcdn.com/w320/as.png'
-        }
+          flag: 'https://flagcdn.com/w320/as.png',
+        },
       ];
 
-      const contries = await appController.getCountries({query: {laneg: 'pt'}}, 'res');
-      
+      const contries = await contriesController.getCountries({
+        query: { laneg: 'pt' },
+      });
       expect(contries).toEqual(countriesMock);
     });
   });
